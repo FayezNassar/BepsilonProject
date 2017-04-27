@@ -24,11 +24,7 @@ private:
     public:
 
         Node(bool leaf, Node* parent = NULL, Node* sibling = NULL);
-
-        //A utility constructor for copy the node content from other to this,
-        //it's useful for split child, to avoid losing the parent child pointer.
-        Node(Node& other);
-
+        
         //A function to check if the node(leaf/internal is full orr not).
         bool isFull();
 
@@ -86,23 +82,6 @@ BEpsilonTree<Key, Value, B>::Node::Node(bool leaf, Node* parent, Node* sibling) 
     this->sibling = sibling;
     this->leaf = leaf;
 };
-
-template <typename Key, typename Value, int B>
-BEpsilonTree<Key, Value, B>::Node::Node(Node& other) {
-
-    //copy/cut the content from other to this
-    this->leaf = other.leaf;
-    this->parent = other.parent;
-
-    this->keys.insert(this->keys.begin(), other.keys.begin(), other.keys.end());
-    other.keys.erase(other.keys.begin(), other.keys.end());
-
-    this->children.insert(this->children.begin(), other.children.begin(), other.children.end());
-    other.children.erase(other.children.begin(), other.children.end());
-
-    this->values.insert(this->values.begin(), other.values.begin(), other.values.end());
-    other.values.erase(other.values.begin(), other.values.end());
-}
 
 template <typename Key, typename Value, int B>
 bool BEpsilonTree<Key, Value, B>::Node::isFull() {
