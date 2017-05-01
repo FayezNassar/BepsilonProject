@@ -228,12 +228,15 @@ void BEpsilonTree<Key, Value, B>::Node::insert(Key key, Value value) {
 
 template<typename Key, typename Value, int B>
 typename BEpsilonTree<Key, Value, B>::Node *BEpsilonTree<Key, Value, B>::Node::approximateSearch(Key key){
-    Node *res = root;
+    Node *res = this;
 
     while (!res->leaf) {
         int pos = 0;
-        for (int i = 0; i < res->keys.size() && key < res->keys[i]; ++i) {
-            pos = i == 0 ? 0 : i + 1;
+        for (int i = 0; i < res->keys.size() ; i++) {
+            if(key < res->keys[i]){
+                pos = i == 0 ? 0 : i + 1;
+                break;
+            }
         }
         res = res->children[pos];
     }
@@ -272,8 +275,8 @@ vector<Value> BEpsilonTree<Key, Value, B>::rangeQuery(Key minKey, Key maxKey) {
 
         while (current != maxNode) {
             for (int i = 0; i < current->keys.size(); ++i) {
-                if (minKey < current->keys[i] && current->keys[i] < maxKey) {
-                    res.insert(current->values[i]);
+                if (minKey <= current->keys[i] && current->keys[i] <= maxKey) {
+                    res.push_back(current->values[i]);
                 }
             }
             current = current->sibling;
