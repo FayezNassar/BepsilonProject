@@ -227,7 +227,7 @@ void BEpsilonTree<Key, Value, B>::Node::insert(Key key, Value value) {
 };
 
 template<typename Key, typename Value, int B>
-typename BEpsilonTree<Key, Value, B>::Node *BEpsilonTree<Key, Value, B>::Node::search(Key key){
+typename BEpsilonTree<Key, Value, B>::Node *BEpsilonTree<Key, Value, B>::Node::approximateSearch(Key key){
     Node *res = root;
 
     while (!res->leaf) {
@@ -266,8 +266,8 @@ vector<Value> BEpsilonTree<Key, Value, B>::rangeQuery(Key minKey, Key maxKey) {
     vector<Value> res;
     if (root != NULL) {
         //get appropriate leafs
-        Node *minNode = root->search(minKey);
-        Node *maxNode = root->search(maxKey);
+        Node *minNode = root->approximateSearch(minKey);
+        Node *maxNode = root->approximateSearch(maxKey);
         Node *current = minNode;
 
         while (current != maxNode) {
