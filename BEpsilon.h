@@ -233,10 +233,8 @@ typename BEpsilonTree<Key, Value, B>::Node *BEpsilonTree<Key, Value, B>::Node::a
     while (!res->leaf) {
         int pos = 0;
         for (int i = 0; i < res->keys.size() ; i++) {
-            if(key < res->keys[i]){
-                pos = i == 0 ? 0 : i + 1;
-                break;
-            }
+            pos = i == 0 ? 0 : i + 1;
+            if(key < res->keys[i]) break;
         }
         res = res->children[pos];
     }
@@ -273,7 +271,7 @@ vector<Value> BEpsilonTree<Key, Value, B>::rangeQuery(Key minKey, Key maxKey) {
         Node *maxNode = root->approximateSearch(maxKey);
         Node *current = minNode;
 
-        while (current != maxNode) {
+        while (current != NULL) {
             for (int i = 0; i < current->keys.size(); ++i) {
                 if (minKey <= current->keys[i] && current->keys[i] <= maxKey) {
                     res.push_back(current->values[i]);
