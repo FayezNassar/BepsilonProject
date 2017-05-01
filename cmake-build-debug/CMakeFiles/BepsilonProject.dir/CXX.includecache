@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/Yossif/ClionProjects/BepsilonProject/BEpsilon.h
+iostream
+-
+vector
+-
+
+C:/Users/Yossif/ClionProjects/BepsilonProject/main.cpp
+iostream
+-
+BEpsilon.h
+C:/Users/Yossif/ClionProjects/BepsilonProject/BEpsilon.h
+

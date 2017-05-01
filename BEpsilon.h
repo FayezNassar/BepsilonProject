@@ -6,10 +6,10 @@
 
 using namespace std;
 
-template <typename Key, typename Value, int B>
+template<typename Key, typename Value, int B>
 class BEpsilonTree {
 public:
-
+    BEpsilonTree():root(NULL){}
     void insert(Key key, Value value);
 
     Value pointQuery(Key key);
@@ -20,16 +20,24 @@ public:
 
 private:
 
-    class Node {
+    typedef class Node {
     public:
 
-        Node(bool leaf, Node* parent = NULL, Node* sibling = NULL);
-        
-        //A function to check if the node(leaf/internal is full orr not).
+        Node(bool leaf, Node *parent = NULL, Node *sibling = NULL);
+
+        /**
+        Check if node is is full, node is full when it has B children.
+
+        @return true if node is full, false else.
+        */
         bool isFull();
 
-        // A function to search a key in subtree rooted with this node.
-        // returns NULL if k is not present
+        /**
+        Search a key in subtree rooted with this node.
+
+        @param key to look up for.
+        @return a pointer for the node of sub tree of key, or NULL if key is not present.
+        */
         Node *search(Key key);
 
 
@@ -38,7 +46,7 @@ private:
         int findKey(Key key);
 
         //A function to find the index of this node in the his parent children vector
-        int findChild();
+        int getOrder();
 
 
         // A utility function to split the child of this node. ix is index
@@ -58,43 +66,43 @@ private:
 
     private:
         bool leaf;
-        Node* parent;
+        Node *parent;
         vector<Key> keys;
 
         //if this node is a leaf
         //values.size() == keys.size(),for now it's equal to 1, keys.size.max == B-1;
         vector<Value> values;
-        Node* sibling;
+        Node *sibling;
 
         //if the node is internal
         //children.size() == keys.size()+1;
-        vector<Node*> children;
+        vector<Node *> children;
 
         friend class BEpsilonTree;
-    };
+    } Node;
 
-    Node* root;
+    Node *root;
 };
 
-template <typename Key, typename Value, int B>
-BEpsilonTree<Key, Value, B>::Node::Node(bool leaf, Node* parent, Node* sibling) {
+template<typename Key, typename Value, int B>
+BEpsilonTree<Key, Value, B>::Node::Node(bool leaf, Node *parent, Node *sibling) {
     this->parent = parent;
     this->sibling = sibling;
     this->leaf = leaf;
 };
 
-template <typename Key, typename Value, int B>
+template<typename Key, typename Value, int B>
 bool BEpsilonTree<Key, Value, B>::Node::isFull() {
     //choose the max number of key and values in each node according to the block size.
-    return this->keys.size()==B;
+    return this->keys.size() == B;
 }
 
-template <typename Key, typename Value, int B>
-int BEpsilonTree<Key, Value, B>::Node::findChild() {
+template<typename Key, typename Value, int B>
+int BEpsilonTree<Key, Value, B>::Node::getOrder() {
     int ix = 0;
     //for sure this node isn't root and full, we check it before this function call.
-    typedef typename vector<BEpsilonTree<Key, Value, B>::Node*>::iterator iterator;
-    for(iterator it = this->parent->children.begin(); it != this->parent->children.end(); it++) {
+    typedef typename vector<BEpsilonTree<Key, Value, B>::Node *>::iterator iterator;
+    for (iterator it = this->parent->children.begin(); it != this->parent->children.end(); it++) {
         if ((*it) == this) {
             return ix;
         } else {
@@ -103,7 +111,7 @@ int BEpsilonTree<Key, Value, B>::Node::findChild() {
     }
 };
 
-template <typename Key, typename Value, int B>
+template<typename Key, typename Value, int B>
 void BEpsilonTree<Key, Value, B>::Node::splitChild(int ix, BEpsilonTree<Key, Value, B>::Node *left_child) {
 
     //this node is the parent of right and left child.
@@ -119,97 +127,97 @@ void BEpsilonTree<Key, Value, B>::Node::splitChild(int ix, BEpsilonTree<Key, Val
 
     //update to move the minimum number of children for each node, and not 1.
     //B should be grater than 2, else infinite loop will occur.
-    int middle_ix = B/2;
+    int middle_ix = B / 2;
 
 
-    if(left_child->leaf) {
+    if (left_child->leaf) {
         right_child->keys.insert(right_child->keys.begin(),
-                                 left_child->keys.begin()+middle_ix,
+                                 left_child->keys.begin() + middle_ix,
                                  left_child->keys.end());
 
-        left_child->keys.erase(left_child->keys.begin()+middle_ix,
+        left_child->keys.erase(left_child->keys.begin() + middle_ix,
                                left_child->keys.end());
 
         right_child->values.insert(right_child->values.begin(),
-                                   left_child->values.begin()+middle_ix,
+                                   left_child->values.begin() + middle_ix,
                                    left_child->values.end());
 
-        left_child->values.erase(left_child->values.begin()+middle_ix,
+        left_child->values.erase(left_child->values.begin() + middle_ix,
                                  left_child->values.end());
 
-        this->keys.insert(this->keys.begin()+ix, right_child->keys[0]);
+        this->keys.insert(this->keys.begin() + ix, right_child->keys[0]);
     } else {
 
         //find the appropriate key and its index.
         int key = left_child->keys[middle_ix];
         int key_ix = 0;
-        while((key_ix >= 0) && (key_ix < this->keys.size()) && (this->keys[key_ix] < key)) {
+        while ((key_ix >= 0) && (key_ix < this->keys.size()) && (this->keys[key_ix] < key)) {
             key_ix++;
         }
 
-        this->keys.insert(this->keys.begin()+key_ix, key);
+        this->keys.insert(this->keys.begin() + key_ix, key);
 
         right_child->keys.insert(right_child->keys.begin(),
-                                 left_child->keys.begin()+(middle_ix+1),
+                                 left_child->keys.begin() + (middle_ix + 1),
                                  left_child->keys.end());
 
-        left_child->keys.erase(left_child->keys.begin()+(middle_ix),
+        left_child->keys.erase(left_child->keys.begin() + (middle_ix),
                                left_child->keys.end());
 
         right_child->children.insert(right_child->children.begin(),
-                                     left_child->children.begin()+middle_ix+1,
+                                     left_child->children.begin() + middle_ix + 1,
                                      left_child->children.end());
 
         // w/o this, compilation error, with nested template in dependent scope.
-        typedef typename vector<BEpsilonTree<Key, Value, B>::Node*>::iterator iterator;
-        for(iterator it = left_child->children.begin()+middle_ix+1; it != left_child->children.end(); it++) {
+        typedef typename vector<BEpsilonTree<Key, Value, B>::Node *>::iterator iterator;
+        for (iterator it = left_child->children.begin() + middle_ix + 1; it != left_child->children.end(); it++) {
             (*it)->parent = right_child;
         }
 
-        left_child->children.erase(left_child->children.begin()+middle_ix+1,
+        left_child->children.erase(left_child->children.begin() + middle_ix + 1,
                                    left_child->children.end());
 
 
     }
 
     //set the new node as a child of this node
-    this->children.insert(this->children.begin()+(ix+1), right_child);
+    this->children.insert(this->children.begin() + (ix + 1), right_child);
 
 };
 
-template <typename Key, typename Value, int B>
+template<typename Key, typename Value, int B>
 void BEpsilonTree<Key, Value, B>::Node::insertKeysUpdate() {
-    if(this->isFull()) {
-        if(this->parent == NULL) {//this is root :)
+    if (this->isFull()) {
+        if (this->parent == NULL) {//this is root :)
             Node *node = new Node(false);
             //move it the the end;
             this->parent = node;
             node->children.insert(node->children.begin(), this);
             node->splitChild(0, this);
         } else {
-            this->parent->splitChild(this->findChild(), this);
+            this->parent->splitChild(this->getOrder(), this);
             this->parent->insertKeysUpdate();
         }
     }
 };
 
-template <typename Key, typename Value, int B>
+template<typename Key, typename Value, int B>
 void BEpsilonTree<Key, Value, B>::Node::insert(Key key, Value value) {
 
     //for finding the key position, we'll start with last index
-    int ix = this->keys.size()-1;
+    int ix = this->keys.size() - 1;
     //find the key index.
-    while(ix >= 0 && keys[ix] > key) {
+    while (ix >= 0 && keys[ix] > key) {
         ix--;
     }
 
-    if(this->leaf) {
-        this->keys.insert(this->keys.begin()+(ix+1), key);
-        this->values.insert(this->values.begin()+(ix+1), value);
+    if (this->leaf) {
+        this->keys.insert(this->keys.begin() + (ix + 1), key);
+        this->values.insert(this->values.begin() + (ix + 1), value);
         this->insertKeysUpdate();
     } else {//this is internal node
         ix = ix == -1 ? 0 : ix;
-        if(this->keys[ix] < key) {
+        if (this->keys[ix] < key) {
             ix++;
         }
         this->children[ix]->insert(key, value);
@@ -224,31 +232,35 @@ void BEpsilonTree<Key, Value, B>::Node::insert(Key key, Value value) {
  * remove: A function to remove a key from the tree.s
  * */
 
-template <typename Key, typename Value, int B>
+template<typename Key, typename Value, int B>
 void BEpsilonTree<Key, Value, B>::insert(Key key, Value value) {
-    if(root == NULL) { // if the Tree is empty
-        root = new BEpsilonTree<Key, Value, B>::Node(true);
+    if (root == NULL) { // if the Tree is empty
+        root = new Node(true);
         root->keys.insert(root->keys.begin(), key);
         root->values.insert(root->values.begin(), value);
     } else { //if the root is not null.
         root->insert(key, value);
-        if(root->parent != NULL) {
+        if (root->parent != NULL) {
             root = root->parent;
         }
     }
 };
 
-template <typename Key, typename Value, int B>
+template<typename Key, typename Value, int B>
 vector<Value> BEpsilonTree<Key, Value, B>::rangeQuery(Key minKey, Key maxKey) {
-
+//    vector<Value> res;
+//    if(root!=NULL){
+//
+//    }
+//    return res;
 }
 
-template <typename Key, typename Value, int B>
+template<typename Key, typename Value, int B>
 Value BEpsilonTree<Key, Value, B>::pointQuery(Key key) {
 
 };
 
-template <typename Key, typename Value, int B>
+template<typename Key, typename Value, int B>
 void BEpsilonTree<Key, Value, B>::remove(Key key) {
     return;
 }
