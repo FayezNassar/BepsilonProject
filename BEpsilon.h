@@ -9,7 +9,8 @@ using namespace std;
 template<typename Key, typename Value, int B>
 class BEpsilonTree {
 public:
-    BEpsilonTree():root(NULL){}
+    BEpsilonTree() : root(NULL) {}
+
     void insert(Key key, Value value);
 
     Value pointQuery(Key key);
@@ -39,7 +40,6 @@ private:
         @return a pointer for the node of sub tree of key, or NULL if key is not present.
         */
         Node *search(Key key);
-
 
         // A function that returns the index of the first key that is greater
         // or equal to k
@@ -224,6 +224,19 @@ void BEpsilonTree<Key, Value, B>::Node::insert(Key key, Value value) {
     }
 };
 
+template<typename Key, typename Value, int B>
+typename BEpsilonTree<Key, Value, B>::Node *BEpsilonTree<Key, Value, B>::Node::search(Key key){
+    Node *res = root;
+
+    while (!res->leaf) {
+        int pos = 0;
+        for (int i = 0; i < res->keys.size() && key < res->keys[i]; ++i) {
+            pos = i == 0 ? 0 : i + 1;
+        }
+        res = res->children[pos];
+    }
+    return res;
+}
 /*
  * the API B+ function
  * insert: A function for insertion to the tree
@@ -248,16 +261,28 @@ void BEpsilonTree<Key, Value, B>::insert(Key key, Value value) {
 
 template<typename Key, typename Value, int B>
 vector<Value> BEpsilonTree<Key, Value, B>::rangeQuery(Key minKey, Key maxKey) {
-//    vector<Value> res;
-//    if(root!=NULL){
-//
-//    }
-//    return res;
+    vector<Value> res;
+    if (root != NULL) {
+        //get appropriate leafs
+        Node *minNode = root->search(minKey);
+        Node *maxNode = root->search(maxKey);
+        Node *current = minNode;
+
+        while (current != maxNode) {
+            for (int i = 0; i < current->keys.size(); ++i) {
+                if (minKey < current->keys[i] && current->keys[i] < maxKey) {
+                    res.insert(current->values[i]);
+                }
+            }
+            current = current->sibling;
+        }
+    }
+    return res;
 }
 
 template<typename Key, typename Value, int B>
 Value BEpsilonTree<Key, Value, B>::pointQuery(Key key) {
-
+    return rangeQuery(key,key)[0];
 };
 
 template<typename Key, typename Value, int B>
