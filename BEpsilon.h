@@ -234,7 +234,7 @@ typename BEpsilonTree<Key, Value, B>::Node *BEpsilonTree<Key, Value, B>::Node::a
         int pos = 0;
         for (int i = 0; i < res->keys.size() ; i++) {
             pos = i == 0 ? 0 : i + 1;
-            if(key < res->keys[i]) break;
+            if(key <= res->keys[i]) break;
         }
         res = res->children[pos];
     }

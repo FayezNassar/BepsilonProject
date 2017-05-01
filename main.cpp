@@ -20,7 +20,12 @@ int main() {
     printVector(tree.rangeQuery(1, 2));
     printVector(tree.rangeQuery(1, 3));
     printVector(tree.rangeQuery(1, 4));
+    printVector(tree.rangeQuery(2, 2));
+    printVector(tree.rangeQuery(2, 3));
     printVector(tree.rangeQuery(2, 4));
+    printVector(tree.rangeQuery(3, 3));
+    printVector(tree.rangeQuery(3, 4));
+    printVector(tree.rangeQuery(4, 4));
     return 0;
 }
 
