@@ -34,12 +34,14 @@ private:
         bool isFull();
 
         /**
-        Search a key in subtree rooted with this node.
+        Approximately search a key in subtree rooted with this node,
+        if a given key is in the range of some leaf keys it will return that
+        leaf else it will return the first or the last leaf.
 
         @param key to look up for.
-        @return a pointer for the node of sub tree of key, or NULL if key is not present.
+        @return a leaf which the given key is in the range of this leaf keys.
         */
-        Node *search(Key key);
+        Node *approximateSearch(Key key);
 
         // A function that returns the index of the first key that is greater
         // or equal to k
