@@ -26,6 +26,16 @@ int main() {
     printVector(tree.rangeQuery(3, 3));
     printVector(tree.rangeQuery(3, 4));
     printVector(tree.rangeQuery(4, 4));
+
+    cout<< tree.pointQuery(3)<<endl;
+
+    try{
+        cout << tree.pointQuery(7);
+    }
+    catch (exception& e) {
+        cout << e.what() << endl;
+    }
+
     return 0;
 }
 

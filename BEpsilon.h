@@ -6,6 +6,20 @@
 
 using namespace std;
 
+class NoSuchKeyException : public exception{
+    virtual const char* what() const throw()
+    {
+        return "No such key element.";
+    }
+};
+
+class InvalidKeyRange : public exception{
+    virtual const char* what() const throw()
+    {
+        return "Invalid keys range.";
+    }
+};
+
 template<typename Key, typename Value, int B>
 class BEpsilonTree {
 public:
@@ -264,6 +278,9 @@ void BEpsilonTree<Key, Value, B>::insert(Key key, Value value) {
 
 template<typename Key, typename Value, int B>
 vector<Value> BEpsilonTree<Key, Value, B>::rangeQuery(Key minKey, Key maxKey) {
+    if(minKey > maxKey){
+        throw InvalidKeyRange();
+    }
     vector<Value> res;
     if (root != NULL) {
         //get appropriate leafs
@@ -285,7 +302,11 @@ vector<Value> BEpsilonTree<Key, Value, B>::rangeQuery(Key minKey, Key maxKey) {
 
 template<typename Key, typename Value, int B>
 Value BEpsilonTree<Key, Value, B>::pointQuery(Key key) {
-    return rangeQuery(key,key)[0];
+    vector<Value> res = rangeQuery(key,key);
+    if(!res.size()){
+        throw NoSuchKeyException();
+    }
+    return res[0];
 };
 
 template<typename Key, typename Value, int B>
