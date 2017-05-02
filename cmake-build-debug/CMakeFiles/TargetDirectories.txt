@@ -1,3 +1,0 @@
-C:/Users/Yossif/ClionProjects/BepsilonProject/cmake-build-debug/CMakeFiles/BepsilonProject.dir
-C:/Users/Yossif/ClionProjects/BepsilonProject/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Yossif/ClionProjects/BepsilonProject/cmake-build-debug/CMakeFiles/rebuild_cache.dir

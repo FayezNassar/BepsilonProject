@@ -1,3 +1,0 @@
-"C:\Users\Yossif\AppData\Roaming\JetBrains\CLion 2017.1\bin\cmake\bin\cmake.exe" -E remove -f CMakeFiles\HelloCPP.dir/objects.a
-C:\MinGW\bin\ar.exe cr CMakeFiles\HelloCPP.dir/objects.a @CMakeFiles\HelloCPP.dir\objects1.rsp
-C:\MinGW\bin\g++.exe  -g   -Wl,--whole-archive CMakeFiles\HelloCPP.dir/objects.a -Wl,--no-whole-archive  -o HelloCPP.exe -Wl,--out-implib,libHelloCPP.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\HelloCPP.dir\linklibs.rsp

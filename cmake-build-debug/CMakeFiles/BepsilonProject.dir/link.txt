@@ -1,3 +1,0 @@
-"C:\Users\Yossif\AppData\Roaming\JetBrains\CLion 2017.1\bin\cmake\bin\cmake.exe" -E remove -f CMakeFiles\BepsilonProject.dir/objects.a
-C:\MinGW\bin\ar.exe cr CMakeFiles\BepsilonProject.dir/objects.a @CMakeFiles\BepsilonProject.dir\objects1.rsp
-C:\MinGW\bin\g++.exe  -g   -Wl,--whole-archive CMakeFiles\BepsilonProject.dir/objects.a -Wl,--no-whole-archive  -o BepsilonProject.exe -Wl,--out-implib,libBepsilonProject.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\BepsilonProject.dir\linklibs.rsp
